@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>HTML</title>
+		<style>
+			.contents {
+				min-width: 70%;
+				width: 80%;
+				height: 5000px;
+				margin: 0 auto 0;
+				border: solid 1px black;
+			}
+			
+			.box {
+				position: absolute;
+				left: 500px;
+				/*top: 198px;*/
+				
+				width: 200px;
+				height: 200px;
+				border: solid 1px black;
+			}
+		</style>
+		<script type="text/javascript">
+			function Contents(elem, page, x1, x2) {
+				var i = 0;
+				
+				this.page_pos = page;
+				
+				this.initial_pos = [];
+				this.initial_pos[0] = this.page_pos + x1[0];
+				this.initial_pos[1] = x1[1];
+				
+				this.final_pos = x2;
+
+				this.speed = [];
+				this.speed[0] = (x2[0] - x1[0]) / page;
+				this.speed[1] = (x2[1] - x1[1]) / page;
+				
+				this.elem = elem;
+				this.elem.style.top = parseInt(this.initial_pos[0]) + "px";
+				
+				this.scrolling = function(scrollx) {
+					this.out();
+					this.elem.style.top = parseInt(this.initial_pos[0] + (this.speed[0] * scrollx)) + "px";
+					this.elem.style.left = parseInt(this.initial_pos[1] + (this.speed[1] * scrollx)) + "px";
+				}
+				
+				this.out = function() {
+					i++;
+					var str = "";
+					str += this.initial_pos[0] + "  ";
+					str += this.final_pos[0] + "  ";
+					str += this.page_pos + "  ";
+					str += this.speed[0] + "  ";
+					console.log(i + "  " + str);
+				}
+			}
+
+			var elem1, elem2;
+			var obj1, obj2;
+			document.addEventListener("DOMContentLoaded", function() {
+				elem1 = document.getElementById("elem1");
+				obj1 = new Contents(elem1, 500, [200, 250], [200, 200]);
+				elem2 = document.getElementById("elem2");
+				obj2 = new Contents(elem2, 500, [300, 400], [100, 300]);
+				
+				obj1.out();
+			}, false);
+			
+			window.onscroll = function() {
+				var scroll_pos  =  parseInt(document.documentElement.scrollTop || window.pageXOffset || 0);
+				obj1.scrolling(scroll_pos);
+				//obj2.scrolling(scroll_pos);
+				
+				if (obj1.page_pos == scroll_pos) {
+					alert("final = " + obj1.final_pos[0] + "final2 = " + obj2.final_pos[0]);
+				}
+			};
+		</script>
+		<meta name="author" content="鎗水謙星" />
+		<!-- Date: 2012-08-27 -->
+	</head>
+	<body>
+		<div class="contents">
+			<div id="elem1" class="box"> </div>
+			<div id="elem2" class="box"> </div>
+		</div>
+
+	</body>
+</html>
+
